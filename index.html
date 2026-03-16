@@ -907,7 +907,30 @@
       footer p { font-size: 0.68rem; }
     }
 
-    /* ── Table of contents ── */
+    /* ── Mobile select for export tabs ── */
+    .mobile-select {
+      display: none;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--fg);
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a3c42' opacity='0.4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.6rem center;
+      padding-right: 1.8rem;
+    }
+
+    @media (max-width: 600px) {
+      .export-section .mobile-select { display: block; }
+      .export-section .view-tabs { display: none !important; }
+    }
     .toc {
       position: fixed;
       bottom: 0;
@@ -1252,6 +1275,15 @@
     <div class="export-section" id="sec-export">
       <div class="colors-header">
         <p class="section-title">Export</p>
+        <select class="mobile-select" onchange="setExport(this.value)">
+          <option value="raw">Raw</option>
+          <option value="css">CSS</option>
+          <option value="vscode">VS Code</option>
+          <option value="iterm">iTerm2</option>
+          <option value="wt">Win Terminal</option>
+          <option value="alacritty">Alacritty</option>
+          <option value="slack">Slack</option>
+        </select>
         <div class="view-tabs">
           <button class="active" onclick="setExport('raw')">Raw</button>
           <button onclick="setExport('css')">CSS</button>
@@ -1360,6 +1392,8 @@
           (fmt === 'css' && btn.textContent === 'CSS') ||
           (fmt === 'raw' && btn.textContent === 'Raw'));
       });
+      const sel = document.querySelector('.export-section .mobile-select');
+      if (sel) sel.value = fmt;
       renderExport();
     }
 
