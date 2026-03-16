@@ -792,10 +792,13 @@
     /* ── Table of contents ── */
     .toc {
       position: fixed;
-      bottom: 2rem;
+      bottom: 0;
+      top: 0;
       left: 2rem;
       z-index: 90;
       display: none;
+      align-items: center;
+      pointer-events: none;
     }
 
     .toc ul {
@@ -803,6 +806,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.45rem;
+      pointer-events: auto;
     }
 
     .toc a {
@@ -835,7 +839,7 @@
     .toc a.active::before { width: 16px; background: var(--fg); }
 
     @media (min-width: 1100px) {
-      .toc { display: block; }
+      .toc { display: flex; }
     }
   </style>
 </head>
