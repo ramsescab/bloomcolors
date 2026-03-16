@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soft Lavender Theme</title>
+  <style>
+    :root {
+      --bg: #f4e8f0;
+      --fg: #4a3c42;
+      --red: #b85e5e;
+      --green: #7a9b7a;
+      --blue: #7a8bb8;
+      --yellow: #c2a875;
+      --magenta: #a67ba6;
+      --cyan: #7bb8b8;
+      --red-bright: #d47979;
+      --green-bright: #8fb58f;
+      --blue-bright: #8fa5d4;
+      --yellow-bright: #ddc299;
+      --magenta-bright: #c299c2;
+      --cyan-bright: #99d4d4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 3rem 1.5rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.7;
+    }
+
+    /* ── Section titles ── */
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 1.25rem;
+      opacity: 0.55;
+    }
+
+    /* ── Base / foreground row ── */
+    .base-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .base-card {
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 130px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .base-card .label { font-weight: 600; font-size: 1.05rem; }
+    .base-card .hex { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.85rem; opacity: 0.75; margin-top: 0.25rem; }
+
+    .base-card.bg-card {
+      background: var(--bg);
+      color: var(--fg);
+      border: 2px solid rgba(74, 60, 66, 0.12);
+    }
+
+    .base-card.fg-card {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    /* ── Color palette grid ── */
+    .palette-section { margin-bottom: 2.5rem; }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .color-card {
+      border-radius: 14px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 2px 12px rgba(74, 60, 66, 0.07);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .color-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(74, 60, 66, 0.12);
+    }
+
+    .swatch {
+      height: 110px;
+      display: flex;
+      align-items: flex-end;
+      padding: 0.75rem 1rem;
+    }
+
+    .swatch span {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      backdrop-filter: blur(4px);
+    }
+
+    .swatch.light-text span { color: #fff; background: rgba(255,255,255,0.15); }
+    .swatch.dark-text span  { color: var(--fg); background: rgba(0,0,0,0.06); }
+
+    .color-info {
+      padding: 0.85rem 1rem;
+    }
+
+    .color-info .name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .color-info .desc {
+      font-size: 0.78rem;
+      opacity: 0.55;
+    }
+
+    /* ── Terminal preview ── */
+    .terminal-section { margin-bottom: 2.5rem; }
+
+    .terminal {
+      background: var(--fg);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(74, 60, 66, 0.15);
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0.75rem 1rem;
+      background: rgba(0,0,0,0.15);
+    }
+
+    .terminal-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+    }
+
+    .terminal-body {
+      padding: 1.25rem 1.5rem;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+
+    .terminal-body .prompt { color: var(--green-bright); }
+    .terminal-body .cmd    { color: var(--bg); }
+    .terminal-body .str    { color: var(--yellow); }
+    .terminal-body .kw     { color: var(--magenta); }
+    .terminal-body .fn     { color: var(--blue-bright); }
+    .terminal-body .cmt    { color: var(--cyan); opacity: 0.7; }
+    .terminal-body .err    { color: var(--red-bright); }
+    .terminal-body .num    { color: var(--yellow-bright); }
+    .terminal-body .type   { color: var(--cyan-bright); }
+
+    /* ── Harmony strip ── */
+    .harmony-section { margin-bottom: 2rem; }
+
+    .harmony-strip {
+      display: flex;
+      border-radius: 14px;
+      overflow: hidden;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(74, 60, 66, 0.07);
+    }
+
+    .harmony-strip div { flex: 1; transition: flex 0.3s ease; }
+    .harmony-strip div:hover { flex: 2; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .base-row { grid-template-columns: 1fr; }
+      .palette-grid { grid-template-columns: 1fr 1fr; }
+      header h1 { font-size: 1.8rem; }
+      body { padding: 2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Soft Lavender</h1>
+      <p>A gentle, desaturated palette inspired by lavender fields at dusk</p>
+    </header>
+
+    <!-- Base colors -->
+    <p class="section-title">Background &amp; Foreground</p>
+    <div class="base-row">
+      <div class="base-card bg-card">
+        <span class="label">Background</span>
+        <span class="hex">#f4e8f0</span>
+      </div>
+      <div class="base-card fg-card">
+        <span class="label">Foreground</span>
+        <span class="hex">#4a3c42</span>
+      </div>
+    </div>
+
+    <!-- Standard colors -->
+    <div class="palette-section">
+      <p class="section-title">Standard Colors</p>
+      <div class="palette-grid">
+        <div class="color-card">
+          <div class="swatch light-text" style="background: var(--red)"><span>#b85e5e</span></div>
+          <div class="color-info"><div class="name">Red</div><div class="desc">Muted rose</div></div>
+        </div>
+        <div class="color-card">
+          <div class="swatch light-text" style="background: var(--green)"><span>#7a9b7a</span></div>
+          <div class="color-info"><div class="name">Green</div><div class="desc">Soft sage green</div></div>
+        </div>
+        <div class="color-card">
+          <div class="swatch light-text" style="background: var(--blue)"><span>#7a8bb8</span></div>
+          <div class="color-info"><div class="name">Blue</div><div class="desc">Dusty blue</div></div>
+        </div>
+        <div class="color-card">
+          <div class="swatch dark-text" style="background: var(--yellow)"><span>#c2a875</span></div>
+          <div class="color-info"><div class="name">Yellow</div><div class="desc">Warm cream</div></div>
+        </div>
+        <div class="color-card">
+          <div class="swatch light-text" style="background: var(--magenta)"><span>#a67ba6</span></div>
+          <div class="color-info"><div class="name">Magenta</div><div class="desc">Soft mauve</div></div>
+        </div>
+        <div class="color-card">
+          <div class="swatch light-text" style="background: var(--cyan)"><span>#7bb8b8</span></div>
+          <div class="color-info"><div class="name">Cyan</div><div class="desc">Muted teal</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bright colors -->
+    <div class="palette-section">
+      <p class="section-title">Bright Colors</p>
+      <div class="palette-grid">
+        <div class="color-card">
+          <div class="swatch light-text" style="background: var(--red-bright)"><span>#d47979</span></div>
+          <div class="color-info"><div class="name">Bright Red</div><div class="desc">Warmer rose</div></div>
+        </div>
+        <div class="color-card">
+          <div class="swatch dark-text" style="background: var(--green-bright)"><span>#8fb58f</span></div>
+          <div class="color-info"><div class="name">Bright Green</div><div class="desc">Brighter sage</div></div>
+        </div>
+        <div class="color-card">
+          <div class="swatch dark-text" style="background: var(--blue-bright)"><span>#8fa5d4</span></div>
+          <div class="color-info"><div class="name">Bright Blue</div><div class="desc">Lighter dusty blue</div></div>
+        </div>
+        <div class="color-card">
+          <div class="swatch dark-text" style="background: var(--yellow-bright)"><span>#ddc299</span></div>
+          <div class="color-info"><div class="name">Bright Yellow</div><div class="desc">Lighter cream</div></div>
+        </div>
+        <div class="color-card">
+          <div class="swatch dark-text" style="background: var(--magenta-bright)"><span>#c299c2</span></div>
+          <div class="color-info"><div class="name">Bright Magenta</div><div class="desc">Brighter mauve</div></div>
+        </div>
+        <div class="color-card">
+          <div class="swatch dark-text" style="background: var(--cyan-bright)"><span>#99d4d4</span></div>
+          <div class="color-info"><div class="name">Bright Cyan</div><div class="desc">Lighter teal</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal preview -->
+    <div class="terminal-section">
+      <p class="section-title">Terminal Preview</p>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot" style="background: var(--red)"></div>
+          <div class="terminal-dot" style="background: var(--yellow)"></div>
+          <div class="terminal-dot" style="background: var(--green)"></div>
+        </div>
+        <div class="terminal-body">
+          <div><span class="cmt"># Soft Lavender Theme</span></div>
+          <div><span class="prompt">❯</span> <span class="cmd">cat</span> <span class="str">theme.py</span></div>
+          <div>&nbsp;</div>
+          <div><span class="kw">import</span> <span class="type">json</span></div>
+          <div><span class="kw">from</span> <span class="type">pathlib</span> <span class="kw">import</span> <span class="type">Path</span></div>
+          <div>&nbsp;</div>
+          <div><span class="kw">def</span> <span class="fn">load_palette</span><span class="cmd">(path: </span><span class="type">str</span><span class="cmd">) -> </span><span class="type">dict</span><span class="cmd">:</span></div>
+          <div><span class="cmd">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="str">"Load a color palette from disk."</span></div>
+          <div><span class="cmd">&nbsp;&nbsp;&nbsp;&nbsp;colors = </span><span class="type">Path</span><span class="cmd">(path).</span><span class="fn">read_text</span><span class="cmd">()</span></div>
+          <div><span class="cmd">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="kw">return</span> <span class="type">json</span><span class="cmd">.</span><span class="fn">loads</span><span class="cmd">(colors)</span></div>
+          <div>&nbsp;</div>
+          <div><span class="cmd">palette = </span><span class="fn">load_palette</span><span class="cmd">(</span><span class="str">"lavender.json"</span><span class="cmd">)</span></div>
+          <div><span class="fn">print</span><span class="cmd">(</span><span class="str">f"Loaded </span><span class="num">{len(palette)}</span><span class="str"> colors"</span><span class="cmd">)</span></div>
+          <div><span class="cmt"># → Loaded 14 colors</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Color harmony strip -->
+    <div class="harmony-section">
+      <p class="section-title">Full Palette</p>
+      <div class="harmony-strip">
+        <div style="background: var(--red)"></div>
+        <div style="background: var(--red-bright)"></div>
+        <div style="background: var(--yellow)"></div>
+        <div style="background: var(--yellow-bright)"></div>
+        <div style="background: var(--green)"></div>
+        <div style="background: var(--green-bright)"></div>
+        <div style="background: var(--cyan)"></div>
+        <div style="background: var(--cyan-bright)"></div>
+        <div style="background: var(--blue)"></div>
+        <div style="background: var(--blue-bright)"></div>
+        <div style="background: var(--magenta)"></div>
+        <div style="background: var(--magenta-bright)"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
