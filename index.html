@@ -64,51 +64,100 @@
     body {
       background: var(--bg);
       color: var(--fg);
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: 'Georgia', 'Times New Roman', serif;
       min-height: 100vh;
-      padding: 3rem 1.5rem;
+      padding: 0;
       transition: background 0.4s ease, color 0.4s ease;
     }
 
-    .container { max-width: 900px; margin: 0 auto; }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 6rem 2rem 3rem;
+    }
 
-    /* ── Header ── */
-    header { text-align: center; margin-bottom: 3rem; }
+    /* ── Theme toggle (top-right corner) ── */
+    .theme-toggle {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.25rem;
+      z-index: 100;
+      display: flex;
+      gap: 0;
+    }
+
+    .theme-toggle button {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.45rem 0.9rem;
+      border: 1.5px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--fg);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .theme-toggle button:first-child { border-radius: 8px 0 0 8px; }
+    .theme-toggle button:last-child  { border-radius: 0 8px 8px 0; border-left: none; }
+
+    .theme-toggle button.active {
+      background: var(--fg);
+      color: var(--bg);
+      border-color: var(--fg);
+    }
+
+    .theme-toggle button:not(.active):hover { opacity: 0.7; }
+
+    /* ── Header — editorial ── */
+    header {
+      text-align: left;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--card-border);
+    }
 
     header h1 {
-      font-size: 2.6rem;
-      font-weight: 300;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.15rem;
+      font-family: 'Georgia', serif;
+      font-size: 4rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      margin-bottom: 0.3rem;
     }
 
     header .romanji {
-      font-size: 1rem;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.88rem;
       font-weight: 400;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       color: var(--muted);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
     }
 
     header .subtitle {
-      font-size: 1rem;
+      font-size: 1.1rem;
+      font-style: italic;
       color: var(--muted);
+      line-height: 1.5;
     }
 
+    /* ── Intro ── */
     .intro {
-      max-width: 560px;
-      margin: 0 auto 0.5rem;
-      text-align: center;
-      font-size: 0.92rem;
-      line-height: 1.75;
-      color: var(--muted);
+      max-width: 100%;
+      margin: 0 0 0.5rem;
+      text-align: left;
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--fg);
+      opacity: 0.75;
     }
 
     .intro-sig {
-      max-width: 560px;
-      margin: 0 auto 2.5rem;
-      text-align: center;
-      font-size: 0.85rem;
+      margin: 0 0 3rem;
+      text-align: left;
+      font-size: 0.9rem;
       font-style: italic;
       color: var(--muted);
     }
@@ -121,46 +170,21 @@
 
     .intro-sig a:hover { color: var(--magenta); }
 
-    /* ── Theme switcher ── */
-    .switcher {
-      display: flex;
-      justify-content: center;
-      gap: 0;
-      margin-bottom: 2.5rem;
-    }
-
-    .switcher button {
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 500;
-      padding: 0.6rem 1.4rem;
-      border: 1.5px solid var(--card-border);
-      background: var(--card-bg);
-      color: var(--fg);
-      cursor: pointer;
-      transition: all 0.25s ease;
-      letter-spacing: 0.02em;
-    }
-
-    .switcher button:first-child { border-radius: 10px 0 0 10px; }
-    .switcher button:last-child  { border-radius: 0 10px 10px 0; border-left: none; }
-
-    .switcher button.active {
-      background: var(--fg);
-      color: var(--bg);
-      border-color: var(--fg);
-    }
-
-    .switcher button:not(.active):hover { background: var(--card-shadow); }
-
-    /* ── Section titles ── */
+    /* ── Section titles — editorial ── */
     .section-title {
-      font-size: 0.75rem;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.68rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       margin-bottom: 1.25rem;
       color: var(--muted);
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--card-border);
+      margin: 3rem 0 2rem;
     }
 
     /* ── Base row ── */
@@ -181,10 +205,10 @@
       transition: background 0.4s ease, color 0.4s ease;
     }
 
-    .base-card .label { font-weight: 600; font-size: 1.05rem; }
+    .base-card .label { font-family: system-ui, sans-serif; font-weight: 600; font-size: 0.95rem; }
     .base-card .hex {
       font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       opacity: 0.65;
       margin-top: 0.25rem;
     }
@@ -242,8 +266,8 @@
     .swatch.dark-text span  { color: var(--fg); background: rgba(0,0,0,0.06); }
 
     .color-info { padding: 0.85rem 1rem; }
-    .color-info .name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.15rem; }
-    .color-info .desc { font-size: 0.78rem; color: var(--muted); }
+    .color-info .name { font-family: system-ui, sans-serif; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.15rem; }
+    .color-info .desc { font-family: system-ui, sans-serif; font-size: 0.75rem; color: var(--muted); }
 
     /* ── Color view switcher ── */
     .colors-header {
@@ -261,8 +285,8 @@
     }
 
     .view-tabs button {
-      font-family: inherit;
-      font-size: 0.72rem;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.68rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -320,8 +344,9 @@
     }
 
     .color-list-name {
+      font-family: system-ui, sans-serif;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       min-width: 110px;
     }
 
@@ -333,7 +358,8 @@
     }
 
     .color-list-desc {
-      font-size: 0.78rem;
+      font-family: system-ui, sans-serif;
+      font-size: 0.75rem;
       color: var(--muted);
       margin-left: auto;
     }
@@ -342,22 +368,23 @@
     .color-visual-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      gap: 0.5rem;
+      gap: 0;
+      border-radius: 14px;
+      overflow: hidden;
     }
 
     .color-visual-cell {
       aspect-ratio: 1;
-      border-radius: 12px;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s ease, border-radius 0.2s ease;
+      transition: opacity 0.2s ease;
       cursor: default;
     }
 
     .color-visual-cell:hover {
-      transform: scale(1.08);
-      border-radius: 16px;
+      opacity: 0.85;
     }
 
     .color-visual-cell span {
@@ -383,8 +410,8 @@
     }
 
     .preview-tabs button {
-      font-family: inherit;
-      font-size: 0.78rem;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.68rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.1em;
@@ -523,7 +550,8 @@
     }
 
     .example-card h3 {
-      font-size: 0.7rem;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.68rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.1em;
@@ -535,8 +563,8 @@
     .btn-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
     .btn {
-      font-family: inherit;
-      font-size: 0.82rem;
+      font-family: system-ui, sans-serif;
+      font-size: 0.78rem;
       font-weight: 500;
       padding: 0.5rem 1rem;
       border-radius: 8px;
@@ -664,15 +692,17 @@
     }
 
     .poster-title {
-      font-size: 4.5rem;
-      font-weight: 200;
-      letter-spacing: 0.12em;
+      font-family: 'Georgia', serif;
+      font-size: 5rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
       text-align: center;
-      line-height: 1.1;
+      line-height: 1;
     }
 
     .poster-sub {
-      font-size: 0.85rem;
+      font-family: system-ui, sans-serif;
+      font-size: 0.75rem;
       color: var(--muted);
       text-align: center;
       letter-spacing: 0.06em;
@@ -707,7 +737,8 @@
     .poster-bar div { flex: 1; }
 
     .poster-tagline {
-      font-size: 0.95rem;
+      font-family: 'Georgia', serif;
+      font-size: 1rem;
       color: var(--muted);
       text-align: center;
       font-style: italic;
@@ -716,14 +747,16 @@
 
     /* ── Footer ── */
     footer {
-      text-align: center;
-      padding: 2.5rem 0 1rem;
-      margin-top: 1rem;
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: left;
+      padding: 2rem 2rem 2.5rem;
       border-top: 1px solid var(--card-border);
     }
 
     footer p {
-      font-size: 0.8rem;
+      font-family: system-ui, sans-serif;
+      font-size: 0.75rem;
       color: var(--muted);
       line-height: 1.8;
     }
@@ -733,6 +766,7 @@
       text-decoration: none;
       font-weight: 600;
       transition: color 0.2s;
+      border-bottom: 1px solid var(--card-border);
     }
 
     footer a:hover { color: var(--magenta); }
@@ -745,15 +779,24 @@
 
     /* ── Responsive ── */
     @media (max-width: 600px) {
+      .container { padding: 5rem 1.25rem 2rem; }
       .base-row { grid-template-columns: 1fr; }
       .palette-grid { grid-template-columns: 1fr 1fr; }
       .examples-grid { grid-template-columns: 1fr; }
-      header h1 { font-size: 2rem; }
-      body { padding: 2rem 1rem; }
+      .color-visual-grid { grid-template-columns: repeat(4, 1fr); }
+      header h1 { font-size: 2.8rem; }
+      .poster-title { font-size: 3rem; }
+      .theme-toggle { top: 0.75rem; right: 0.75rem; }
     }
   </style>
 </head>
 <body>
+  <!-- Theme toggle (fixed corner) -->
+  <div class="theme-toggle">
+    <button class="active" onclick="setTheme('light')">☀ Light</button>
+    <button onclick="setTheme('dark')">☾ Dark</button>
+  </div>
+
   <div class="container">
     <header>
       <h1 id="theme-title">ゆったり</h1>
@@ -766,11 +809,7 @@
     </p>
     <p class="intro-sig">– <a href="https://ramses.work" target="_blank" rel="noopener">ramses c.</a></p>
 
-    <!-- Theme switcher -->
-    <div class="switcher">
-      <button class="active" onclick="setTheme('light')">☀ Light</button>
-      <button onclick="setTheme('dark')">☾ Dark</button>
-    </div>
+    <hr class="section-divider">
 
     <!-- Base colors -->
     <p class="section-title">Background &amp; Foreground</p>
@@ -784,6 +823,8 @@
         <span class="hex" id="hex-fg">#4a3c42</span>
       </div>
     </div>
+
+    <hr class="section-divider">
 
     <!-- Colors -->
     <div class="palette-section">
@@ -872,6 +913,8 @@
         <button class="copy-btn" onclick="copyColorList()">Copy</button>
       </div>
     </div>
+
+    <hr class="section-divider">
 
     <!-- Previews -->
     <div class="preview-section">
@@ -1095,7 +1138,7 @@
       });
 
       // Update switcher buttons
-      document.querySelectorAll('.switcher button').forEach(btn => {
+      document.querySelectorAll('.theme-toggle button').forEach(btn => {
         btn.classList.toggle('active', btn.textContent.includes(mode === 'light' ? 'Light' : 'Dark'));
       });
 
