@@ -550,6 +550,112 @@
     .harmony-strip div { flex: 1; transition: flex 0.3s ease; }
     .harmony-strip div:hover { flex: 2; }
 
+    /* ── Fullscreen color viewer ── */
+    .fs-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.4s ease;
+      touch-action: pan-y;
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .fs-overlay.active { display: flex; }
+
+    .fs-info {
+      text-align: center;
+      pointer-events: none;
+    }
+    .fs-name {
+      font-family: system-ui, sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+      opacity: 0.85;
+    }
+    .fs-hex {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 1rem;
+      opacity: 0.6;
+    }
+    .fs-desc {
+      font-family: system-ui, sans-serif;
+      font-size: 0.82rem;
+      opacity: 0.5;
+      margin-top: 0.3rem;
+    }
+    .fs-counter {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'SF Mono', monospace;
+      font-size: 0.72rem;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .fs-dots {
+      position: absolute;
+      bottom: 3.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+    .fs-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      opacity: 0.25;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .fs-dot.active {
+      opacity: 0.7;
+      transform: scale(1.4);
+    }
+    .fs-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      opacity: 0.5;
+      pointer-events: auto;
+      padding: 0.5rem;
+      line-height: 1;
+    }
+    .fs-close:hover { opacity: 0.8; }
+    .fs-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      opacity: 0.3;
+      padding: 1rem;
+      pointer-events: auto;
+    }
+    .fs-nav:hover { opacity: 0.6; }
+    .fs-prev { left: 1rem; }
+    .fs-next { right: 1rem; }
+
+    @media (max-width: 600px) {
+      .fs-nav { display: none; }
+      .fs-name { font-size: 1.1rem; }
+      .fs-hex { font-size: 0.88rem; }
+    }
+
     /* ── Export section ── */
     .export-section { margin-bottom: 2.5rem; }
 
@@ -1274,10 +1380,13 @@
     <div class="palette-section">
       <div class="colors-header">
         <p class="section-title" id="sec-colors">Colors</p>
-        <div class="view-tabs" role="tablist" aria-label="Color display">
-          <button class="active" role="tab" aria-selected="true" onclick="setColorView('cards')">Cards</button>
-          <button role="tab" aria-selected="false" onclick="setColorView('list')">List</button>
-          <button role="tab" aria-selected="false" onclick="setColorView('grid')">Grid</button>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <button class="fs-trigger" onclick="openFullscreen()" title="Fullscreen viewer" style="background: none; border: 1px solid var(--card-border); border-radius: 8px; padding: 0.3rem 0.6rem; font-size: 0.7rem; font-weight: 600; cursor: pointer; color: var(--muted); letter-spacing: 0.04em; font-family: system-ui, sans-serif;">⛶ Fullscreen</button>
+          <div class="view-tabs" role="tablist" aria-label="Color display">
+            <button class="active" role="tab" aria-selected="true" onclick="setColorView('cards')">Cards</button>
+            <button role="tab" aria-selected="false" onclick="setColorView('list')">List</button>
+            <button role="tab" aria-selected="false" onclick="setColorView('grid')">Grid</button>
+          </div>
         </div>
       </div>
 
@@ -1950,7 +2059,95 @@
       }).join('');
     }
 
-    // Init
+    // Fullscreen color viewer
+    const fsColors = [
+      { key: 'bg', name: 'Background', desc: 'Base background', light: false },
+      { key: 'fg', name: 'Foreground', desc: 'Base text color', light: true },
+      ...colorMeta
+    ];
+    let fsIndex = 0;
+    let fsTouchStartX = 0;
+
+    function getFsColor(idx) {
+      const mode = document.documentElement.getAttribute('data-theme') || 'light';
+      const t = themes[mode];
+      const all = { bg: t.bg, fg: t.fg, ...t.colors };
+      return all[fsColors[idx].key];
+    }
+
+    function updateFs() {
+      const c = fsColors[fsIndex];
+      const hex = getFsColor(fsIndex);
+      const overlay = document.getElementById('fs-overlay');
+      overlay.style.backgroundColor = hex;
+
+      // Text color: use light or dark based on color
+      const textColor = c.light ? '#ffffff' : '#1e181c';
+      overlay.style.color = textColor;
+
+      document.getElementById('fs-name').textContent = c.name;
+      document.getElementById('fs-hex').textContent = hex;
+      document.getElementById('fs-desc').textContent = c.desc;
+      document.getElementById('fs-counter').textContent = `${fsIndex + 1} / ${fsColors.length}`;
+
+      // Update dots
+      document.querySelectorAll('.fs-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === fsIndex);
+        dot.style.backgroundColor = textColor;
+      });
+
+      // Nav + close button colors
+      overlay.querySelectorAll('button').forEach(btn => btn.style.color = textColor);
+    }
+
+    function openFullscreen(startIndex) {
+      fsIndex = startIndex || 0;
+      const overlay = document.getElementById('fs-overlay');
+
+      // Build dots
+      const dotsEl = document.getElementById('fs-dots');
+      dotsEl.innerHTML = fsColors.map(() => '<div class="fs-dot"></div>').join('');
+
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      updateFs();
+    }
+
+    function closeFullscreen() {
+      document.getElementById('fs-overlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function fsNav(dir) {
+      fsIndex = (fsIndex + dir + fsColors.length) % fsColors.length;
+      updateFs();
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      const overlay = document.getElementById('fs-overlay');
+      if (!overlay.classList.contains('active')) return;
+      if (e.key === 'Escape') closeFullscreen();
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') fsNav(1);
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') fsNav(-1);
+    });
+
+    // Touch swipe support
+    document.getElementById('fs-overlay').addEventListener('touchstart', (e) => {
+      fsTouchStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
+
+    document.getElementById('fs-overlay').addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - fsTouchStartX;
+      if (Math.abs(dx) > 50) fsNav(dx < 0 ? 1 : -1);
+    }, { passive: true });
+
+    // Click to advance (not on buttons)
+    document.getElementById('fs-overlay').addEventListener('click', (e) => {
+      if (e.target.tagName === 'BUTTON') return;
+      const x = e.clientX / window.innerWidth;
+      fsNav(x > 0.5 ? 1 : -1);
+    });
     setTheme('light');
     renderColorViews();
 
@@ -2038,5 +2235,19 @@
 
     initShader();
   </script>
+
+  <!-- Fullscreen color overlay -->
+  <div class="fs-overlay" id="fs-overlay">
+    <button class="fs-close" onclick="closeFullscreen()">✕</button>
+    <button class="fs-nav fs-prev" onclick="fsNav(-1)">‹</button>
+    <button class="fs-nav fs-next" onclick="fsNav(1)">›</button>
+    <div class="fs-info">
+      <div class="fs-name" id="fs-name"></div>
+      <div class="fs-hex" id="fs-hex"></div>
+      <div class="fs-desc" id="fs-desc"></div>
+    </div>
+    <div class="fs-dots" id="fs-dots"></div>
+    <div class="fs-counter" id="fs-counter"></div>
+  </div>
 </body>
 </html>
