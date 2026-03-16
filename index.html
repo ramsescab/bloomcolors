@@ -2148,16 +2148,24 @@
 
     // Touch swipe support
     let fsSwiped = false;
-    document.getElementById('fs-overlay').addEventListener('touchstart', (e) => {
-      fsTouchStartX = e.changedTouches[0].clientX;
+    let fsTouchActive = false;
+
+    document.addEventListener('touchstart', (e) => {
+      const overlay = document.getElementById('fs-overlay');
+      if (!overlay.classList.contains('active')) return;
+      fsTouchStartX = e.touches[0].clientX;
+      fsTouchActive = true;
       fsSwiped = false;
     }, { passive: true });
 
-    document.getElementById('fs-overlay').addEventListener('touchmove', (e) => {
+    document.addEventListener('touchmove', (e) => {
+      if (!fsTouchActive) return;
       e.preventDefault();
     }, { passive: false });
 
-    document.getElementById('fs-overlay').addEventListener('touchend', (e) => {
+    document.addEventListener('touchend', (e) => {
+      if (!fsTouchActive) return;
+      fsTouchActive = false;
       const dx = e.changedTouches[0].clientX - fsTouchStartX;
       if (Math.abs(dx) > 40) {
         fsNav(dx < 0 ? 1 : -1);
@@ -2165,7 +2173,7 @@
       }
     }, { passive: true });
 
-    // Click to advance (not on buttons, not after swipe)
+    // Click/tap to advance (not on buttons, not after swipe)
     document.getElementById('fs-overlay').addEventListener('click', (e) => {
       if (e.target.tagName === 'BUTTON' || fsSwiped) { fsSwiped = false; return; }
       const x = e.clientX / window.innerWidth;
