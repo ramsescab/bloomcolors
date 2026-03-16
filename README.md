@@ -2,7 +2,7 @@
 
 **yuttari** /jɯttaɾi/ — a calm, relaxed palette 〜 soft hues that feel like a quiet afternoon.
 
-🌸 **[View the showcase →](https://ramsescab.github.io/bloomcolors/)**
+🌸 **[View the showcase →](https://ramsescab.github.io/yuttari-theme/)**
 
 ---
 
