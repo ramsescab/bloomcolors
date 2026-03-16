@@ -442,6 +442,78 @@
       margin-bottom: 0.5rem;
     }
 
+    /* ── Poster preview ── */
+    .poster-section { margin-bottom: 2.5rem; }
+
+    .poster {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      background: var(--bg);
+      transition: background 0.4s ease;
+    }
+
+    .poster-inner {
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      min-height: 420px;
+      justify-content: center;
+    }
+
+    .poster-title {
+      font-size: 4.5rem;
+      font-weight: 200;
+      letter-spacing: 0.12em;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .poster-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-align: center;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .poster-circles {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .poster-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+
+    .poster-circle:hover { transform: scale(1.25); }
+
+    .poster-bar {
+      display: flex;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      max-width: 360px;
+    }
+
+    .poster-bar div { flex: 1; }
+
+    .poster-tagline {
+      font-size: 0.95rem;
+      color: var(--muted);
+      text-align: center;
+      font-style: italic;
+      letter-spacing: 0.02em;
+    }
+
     /* ── Footer ── */
     footer {
       text-align: center;
@@ -624,9 +696,9 @@
       </div>
     </div>
 
-    <!-- UI Examples -->
+    <!-- UI Preview -->
     <div class="examples-section">
-      <p class="section-title">UI Examples</p>
+      <p class="section-title">UI Preview</p>
       <div class="examples-grid">
 
         <!-- Buttons -->
@@ -711,9 +783,41 @@
 
       </div>
     </div>
-  </div>
 
-  <!-- Footer -->
+    <!-- Poster Preview -->
+    <div class="poster-section">
+      <p class="section-title">Poster Preview</p>
+      <div class="poster">
+        <div class="poster-inner">
+          <div class="poster-sub">Color theme</div>
+          <div class="poster-title">ゆったり</div>
+          <div class="poster-circles">
+            <div class="poster-circle" style="background: var(--red)"></div>
+            <div class="poster-circle" style="background: var(--yellow)"></div>
+            <div class="poster-circle" style="background: var(--green)"></div>
+            <div class="poster-circle" style="background: var(--cyan)"></div>
+            <div class="poster-circle" style="background: var(--blue)"></div>
+            <div class="poster-circle" style="background: var(--magenta)"></div>
+          </div>
+          <div class="poster-bar">
+            <div style="background: var(--red)"></div>
+            <div style="background: var(--red-bright)"></div>
+            <div style="background: var(--yellow)"></div>
+            <div style="background: var(--yellow-bright)"></div>
+            <div style="background: var(--green)"></div>
+            <div style="background: var(--green-bright)"></div>
+            <div style="background: var(--cyan)"></div>
+            <div style="background: var(--cyan-bright)"></div>
+            <div style="background: var(--blue)"></div>
+            <div style="background: var(--blue-bright)"></div>
+            <div style="background: var(--magenta)"></div>
+            <div style="background: var(--magenta-bright)"></div>
+          </div>
+          <div class="poster-tagline">"Calm colors for calm minds"</div>
+        </div>
+      </div>
+    </div>
+  </div>
   <footer>
     <p>
       Designed by <a href="https://github.com/ramsescab" target="_blank" rel="noopener">@ramsescab</a>
