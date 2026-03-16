@@ -700,80 +700,147 @@
       margin-bottom: 0.5rem;
     }
 
-    /* ── Poster preview ── */
+    /* ── Poster/Banner preview ── */
     .poster-section { margin-bottom: 2.5rem; }
 
     .poster {
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid var(--card-border);
-      background: var(--bg);
+      position: relative;
       transition: background 0.4s ease;
     }
 
+    .poster-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, var(--magenta-bright), transparent 50%),
+        radial-gradient(ellipse at 80% 30%, var(--blue-bright), transparent 50%),
+        radial-gradient(ellipse at 50% 90%, var(--cyan-bright), transparent 50%),
+        var(--bg);
+      opacity: 0.45;
+      transition: opacity 0.4s ease;
+    }
+
     .poster-inner {
-      padding: 3rem 2.5rem;
+      position: relative;
+      padding: 3.5rem 2.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2rem;
-      min-height: 420px;
+      gap: 1.5rem;
+      min-height: 480px;
       justify-content: center;
     }
 
     .poster-title {
       font-family: 'Georgia', serif;
-      font-size: 5rem;
+      font-size: 6rem;
       font-weight: 400;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-align: center;
       line-height: 1;
     }
 
-    .poster-sub {
+    .poster-romanji {
       font-family: system-ui, sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
       color: var(--muted);
       text-align: center;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      margin-top: -0.5rem;
     }
 
-    .poster-circles {
+    .poster-palette {
       display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .poster-circle {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      transition: transform 0.3s ease;
-    }
-
-    .poster-circle:hover { transform: scale(1.25); }
-
-    .poster-bar {
-      display: flex;
-      width: 100%;
-      height: 6px;
-      border-radius: 3px;
+      gap: 0;
+      border-radius: 40px;
       overflow: hidden;
-      max-width: 360px;
+      box-shadow: 0 4px 20px var(--card-shadow);
     }
 
-    .poster-bar div { flex: 1; }
+    .poster-swatch {
+      width: 36px;
+      height: 36px;
+      transition: transform 0.3s ease, width 0.3s ease;
+    }
+
+    .poster-swatch:hover { transform: scaleY(1.3); }
+
+    .poster-divider {
+      width: 60px;
+      height: 1px;
+      background: var(--card-border);
+      margin: 0.5rem 0;
+    }
 
     .poster-tagline {
       font-family: 'Georgia', serif;
-      font-size: 1rem;
+      font-size: 1.05rem;
       color: var(--muted);
       text-align: center;
       font-style: italic;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.03em;
+      max-width: 320px;
+      line-height: 1.6;
     }
+
+    .poster-meta {
+      font-family: system-ui, sans-serif;
+      font-size: 0.62rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+
+    /* ── Syntax preview ── */
+    .syntax-preview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .syntax-block {
+      background: var(--terminal-bg);
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 4px 24px var(--card-shadow);
+    }
+
+    .syntax-label {
+      font-family: system-ui, sans-serif;
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--terminal-fg);
+      opacity: 0.35;
+      padding: 0.75rem 1.25rem 0;
+    }
+
+    .syntax-body {
+      padding: 0.75rem 1.25rem 1.25rem;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.78rem;
+      line-height: 1.75;
+      color: var(--terminal-fg);
+    }
+
+    .syntax-body .s-kw     { color: var(--magenta-bright); }
+    .syntax-body .s-fn     { color: var(--blue-bright); }
+    .syntax-body .s-str    { color: var(--yellow); }
+    .syntax-body .s-cmt    { color: var(--cyan); opacity: 0.65; }
+    .syntax-body .s-type   { color: var(--cyan-bright); }
+    .syntax-body .s-num    { color: var(--yellow-bright); }
+    .syntax-body .s-var    { color: var(--red-bright); }
+    .syntax-body .s-op     { color: var(--fg); opacity: 0.5; }
+    .syntax-body .s-tag    { color: var(--red); }
+    .syntax-body .s-attr   { color: var(--yellow); }
+    .syntax-body .s-val    { color: var(--green); }
 
     /* ── Footer ── */
     footer {
@@ -885,13 +952,17 @@
 
       /* Poster compact */
       .poster { border-radius: 10px; }
-      .poster-inner { padding: 2rem 1.5rem; gap: 1.25rem; min-height: 280px; }
-      .poster-title { font-size: 2.8rem; }
-      .poster-sub { font-size: 0.65rem; }
-      .poster-circles { gap: 0.5rem; }
-      .poster-circle { width: 32px; height: 32px; }
-      .poster-bar { height: 4px; }
+      .poster-inner { padding: 2rem 1.25rem; gap: 1rem; min-height: 320px; }
+      .poster-title { font-size: 3rem; }
+      .poster-romanji { font-size: 0.7rem; }
+      .poster-swatch { width: 26px; height: 26px; }
       .poster-tagline { font-size: 0.85rem; }
+
+      /* Syntax compact */
+      .syntax-preview { grid-template-columns: 1fr; gap: 0.6rem; }
+      .syntax-block { border-radius: 10px; }
+      .syntax-label { font-size: 0.58rem; padding: 0.6rem 1rem 0; }
+      .syntax-body { padding: 0.5rem 1rem 1rem; font-size: 0.68rem; line-height: 1.6; }
 
       /* Harmony strip compact */
       .harmony-strip { height: 44px; border-radius: 10px; }
@@ -1118,6 +1189,7 @@
         <p class="section-title">Previews</p>
         <div class="preview-tabs">
           <button class="active" onclick="setPreview('terminal')">Terminal</button>
+          <button onclick="setPreview('syntax')">Syntax</button>
           <button onclick="setPreview('ui')">UI</button>
           <button onclick="setPreview('banner')">Banner</button>
         </div>
@@ -1146,6 +1218,70 @@
             <div><span class="cmd">palette = </span><span class="fn">load_palette</span><span class="cmd">(</span><span class="str">"lavender.json"</span><span class="cmd">)</span></div>
             <div><span class="fn">print</span><span class="cmd">(</span><span class="str">f"Loaded </span><span class="num">{len(palette)}</span><span class="str"> colors"</span><span class="cmd">)</span></div>
             <div><span class="cmt"># → Loaded 14 colors</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Syntax preview -->
+      <div class="preview-panel" id="preview-syntax">
+        <div class="syntax-preview">
+          <div class="syntax-block">
+            <div class="syntax-label">JavaScript</div>
+            <div class="syntax-body">
+<span class="s-kw">const</span> <span class="s-var">palette</span> <span class="s-op">=</span> {
+  <span class="s-attr">name</span><span class="s-op">:</span> <span class="s-str">'ゆったり'</span>,
+  <span class="s-attr">colors</span><span class="s-op">:</span> <span class="s-num">14</span>,
+};
+
+<span class="s-kw">function</span> <span class="s-fn">applyTheme</span>(el) {
+  <span class="s-kw">const</span> <span class="s-var">bg</span> <span class="s-op">=</span> <span class="s-fn">getColor</span>(<span class="s-str">'bg'</span>);
+  el.style.background <span class="s-op">=</span> <span class="s-var">bg</span>;
+  <span class="s-kw">return</span> <span class="s-var">palette</span>;
+}
+            </div>
+          </div>
+          <div class="syntax-block">
+            <div class="syntax-label">HTML / CSS</div>
+            <div class="syntax-body">
+<span class="s-tag">&lt;div</span> <span class="s-attr">class</span><span class="s-op">=</span><span class="s-str">"theme"</span><span class="s-tag">&gt;</span>
+  <span class="s-tag">&lt;h1&gt;</span>ゆったり<span class="s-tag">&lt;/h1&gt;</span>
+<span class="s-tag">&lt;/div&gt;</span>
+
+<span class="s-tag">&lt;style&gt;</span>
+<span class="s-fn">.theme</span> {
+  <span class="s-attr">background</span><span class="s-op">:</span> <span class="s-val">#ffedf4</span>;
+  <span class="s-attr">color</span><span class="s-op">:</span> <span class="s-val">#4a3c42</span>;
+  <span class="s-attr">font-family</span><span class="s-op">:</span> <span class="s-str">Georgia</span>;
+}
+<span class="s-tag">&lt;/style&gt;</span>
+            </div>
+          </div>
+          <div class="syntax-block">
+            <div class="syntax-label">Python</div>
+            <div class="syntax-body">
+<span class="s-kw">from</span> <span class="s-type">dataclasses</span> <span class="s-kw">import</span> <span class="s-type">dataclass</span>
+
+<span class="s-cmt"># soft colors for calm minds</span>
+<span class="s-op">@</span><span class="s-type">dataclass</span>
+<span class="s-kw">class</span> <span class="s-type">Theme</span>:
+    <span class="s-var">name</span>: <span class="s-type">str</span> <span class="s-op">=</span> <span class="s-str">"ゆったり"</span>
+    <span class="s-var">bg</span>: <span class="s-type">str</span> <span class="s-op">=</span> <span class="s-str">"#ffedf4"</span>
+    <span class="s-var">fg</span>: <span class="s-type">str</span> <span class="s-op">=</span> <span class="s-str">"#4a3c42"</span>
+            </div>
+          </div>
+          <div class="syntax-block">
+            <div class="syntax-label">Rust</div>
+            <div class="syntax-body">
+<span class="s-kw">use</span> <span class="s-type">serde</span>::{<span class="s-type">Deserialize</span>};
+
+<span class="s-cmt">// palette configuration</span>
+<span class="s-op">#[</span><span class="s-fn">derive</span>(<span class="s-type">Deserialize</span>)<span class="s-op">]</span>
+<span class="s-kw">struct</span> <span class="s-type">Palette</span> {
+    <span class="s-var">bg</span>: <span class="s-type">String</span>,
+    <span class="s-var">fg</span>: <span class="s-type">String</span>,
+    <span class="s-var">colors</span>: <span class="s-type">Vec</span><span class="s-op">&lt;</span><span class="s-type">Color</span><span class="s-op">&gt;</span>,
+}
+            </div>
           </div>
         </div>
       </div>
@@ -1238,32 +1374,28 @@
       <!-- Banner preview -->
       <div class="preview-panel" id="preview-banner">
         <div class="poster">
+          <div class="poster-bg"></div>
           <div class="poster-inner">
-            <div class="poster-sub">Color theme</div>
+            <div class="poster-meta">Color theme · 14 colors · Light & Dark</div>
             <div class="poster-title">ゆったり</div>
-            <div class="poster-circles">
-              <div class="poster-circle" style="background: var(--red)"></div>
-              <div class="poster-circle" style="background: var(--yellow)"></div>
-              <div class="poster-circle" style="background: var(--green)"></div>
-              <div class="poster-circle" style="background: var(--cyan)"></div>
-              <div class="poster-circle" style="background: var(--blue)"></div>
-              <div class="poster-circle" style="background: var(--magenta)"></div>
+            <div class="poster-romanji">yuttari /jɯttaɾi/</div>
+            <div class="poster-palette">
+              <div class="poster-swatch" style="background: var(--red)"></div>
+              <div class="poster-swatch" style="background: var(--red-bright)"></div>
+              <div class="poster-swatch" style="background: var(--yellow)"></div>
+              <div class="poster-swatch" style="background: var(--yellow-bright)"></div>
+              <div class="poster-swatch" style="background: var(--green)"></div>
+              <div class="poster-swatch" style="background: var(--green-bright)"></div>
+              <div class="poster-swatch" style="background: var(--cyan)"></div>
+              <div class="poster-swatch" style="background: var(--cyan-bright)"></div>
+              <div class="poster-swatch" style="background: var(--blue)"></div>
+              <div class="poster-swatch" style="background: var(--blue-bright)"></div>
+              <div class="poster-swatch" style="background: var(--magenta)"></div>
+              <div class="poster-swatch" style="background: var(--magenta-bright)"></div>
             </div>
-            <div class="poster-bar">
-              <div style="background: var(--red)"></div>
-              <div style="background: var(--red-bright)"></div>
-              <div style="background: var(--yellow)"></div>
-              <div style="background: var(--yellow-bright)"></div>
-              <div style="background: var(--green)"></div>
-              <div style="background: var(--green-bright)"></div>
-              <div style="background: var(--cyan)"></div>
-              <div style="background: var(--cyan-bright)"></div>
-              <div style="background: var(--blue)"></div>
-              <div style="background: var(--blue-bright)"></div>
-              <div style="background: var(--magenta)"></div>
-              <div style="background: var(--magenta-bright)"></div>
-            </div>
-            <div class="poster-tagline">"Calm colors for calm minds"</div>
+            <div class="poster-divider"></div>
+            <div class="poster-tagline">"soft hues that feel like a quiet afternoon"</div>
+            <div class="poster-meta">designed by @ramsescab</div>
           </div>
         </div>
       </div>
@@ -1275,23 +1407,29 @@
     <div class="export-section" id="sec-export">
       <div class="colors-header">
         <p class="section-title">Export</p>
-        <select class="mobile-select" onchange="setExport(this.value)">
-          <option value="raw">Raw</option>
-          <option value="css">CSS</option>
-          <option value="vscode">VS Code</option>
-          <option value="iterm">iTerm2</option>
-          <option value="wt">Win Terminal</option>
-          <option value="alacritty">Alacritty</option>
-          <option value="slack">Slack</option>
-        </select>
-        <div class="view-tabs">
-          <button class="active" onclick="setExport('raw')">Raw</button>
-          <button onclick="setExport('css')">CSS</button>
-          <button onclick="setExport('vscode')">VS Code</button>
-          <button onclick="setExport('iterm')">iTerm2</button>
-          <button onclick="setExport('wt')">Win Terminal</button>
-          <button onclick="setExport('alacritty')">Alacritty</button>
-          <button onclick="setExport('slack')">Slack</button>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <div class="view-tabs export-theme-tabs">
+            <button class="active" onclick="setExportTheme('light')">☀ Light</button>
+            <button onclick="setExportTheme('dark')">☾ Dark</button>
+          </div>
+          <select class="mobile-select" onchange="setExport(this.value)">
+            <option value="raw">Raw</option>
+            <option value="css">CSS</option>
+            <option value="vscode">VS Code</option>
+            <option value="iterm">iTerm2</option>
+            <option value="wt">Win Terminal</option>
+            <option value="alacritty">Alacritty</option>
+            <option value="slack">Slack</option>
+          </select>
+          <div class="view-tabs export-format-tabs">
+            <button class="active" onclick="setExport('raw')">Raw</button>
+            <button onclick="setExport('css')">CSS</button>
+            <button onclick="setExport('vscode')">VS Code</button>
+            <button onclick="setExport('iterm')">iTerm2</button>
+            <button onclick="setExport('wt')">Win Terminal</button>
+            <button onclick="setExport('alacritty')">Alacritty</button>
+            <button onclick="setExport('slack')">Slack</button>
+          </div>
         </div>
       </div>
       <div class="colorlist" id="export-block">
