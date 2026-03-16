@@ -549,6 +549,28 @@
 
     .export-section .colors-header { margin-bottom: 1.25rem; }
 
+    .export-select {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.4rem 0.6rem;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--fg);
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a3c42' opacity='0.4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.6rem center;
+      padding-right: 1.8rem;
+    }
+
+    [data-theme="dark"] .export-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23ffedf4' opacity='0.4'/%3E%3C/svg%3E");
+    }
+
     .colorlist {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -1058,7 +1080,6 @@
 
     @media (max-width: 600px) {
       .export-section .mobile-select { display: block; }
-      .export-section .view-tabs { display: none !important; }
     }
     .toc {
       position: fixed;
@@ -1219,7 +1240,7 @@
   <div class="container">
     <header id="sec-about">
       <h1 id="theme-title">ゆったり</h1>
-      <p class="romanji">yuttari <span style="opacity: 0.5;">/jɯttaɾi/</span></p>
+      <p class="romanji">yuttari — <span style="opacity: 0.5;">comfortable; easy; calm; relaxed</span></p>
       <p class="subtitle" id="theme-subtitle">A calm, relaxed palette 〜 soft hues that feel like a quiet afternoon</p>
     </header>
 
@@ -1522,7 +1543,7 @@
           <div class="poster-inner">
             <div class="poster-meta">Color theme · 14 colors · Light & Dark</div>
             <div class="poster-title">ゆったり</div>
-            <div class="poster-romanji">yuttari /jɯttaɾi/</div>
+            <div class="poster-romanji">yuttari — comfortable; easy; calm; relaxed</div>
             <div class="poster-palette">
               <div class="poster-swatch" style="background: var(--red)"></div>
               <div class="poster-swatch" style="background: var(--red-bright)"></div>
@@ -1556,24 +1577,16 @@
             <button class="active" role="tab" aria-selected="true" onclick="setExportTheme('light')">☀ Light</button>
             <button role="tab" aria-selected="false" onclick="setExportTheme('dark')">☾ Dark</button>
           </div>
-          <select class="mobile-select" aria-label="Export format" onchange="setExport(this.value)">
+          <select class="export-select" aria-label="Export format" onchange="setExport(this.value)">
             <option value="raw">Raw</option>
             <option value="css">CSS</option>
             <option value="vscode">VS Code</option>
             <option value="iterm">iTerm2</option>
             <option value="wt">Win Terminal</option>
             <option value="alacritty">Alacritty</option>
+            <option value="ghostty">Ghostty</option>
             <option value="slack">Slack</option>
           </select>
-          <div class="view-tabs export-format-tabs" role="tablist" aria-label="Export format">
-            <button class="active" role="tab" aria-selected="true" onclick="setExport('raw')">Raw</button>
-            <button role="tab" aria-selected="false" onclick="setExport('css')">CSS</button>
-            <button role="tab" aria-selected="false" onclick="setExport('vscode')">VS Code</button>
-            <button role="tab" aria-selected="false" onclick="setExport('iterm')">iTerm2</button>
-            <button role="tab" aria-selected="false" onclick="setExport('wt')">Win Terminal</button>
-            <button role="tab" aria-selected="false" onclick="setExport('alacritty')">Alacritty</button>
-            <button role="tab" aria-selected="false" onclick="setExport('slack')">Slack</button>
-          </div>
         </div>
       </div>
       <div class="colorlist" id="export-block">
@@ -1663,17 +1676,7 @@
 
     function setExport(fmt) {
       currentExport = fmt;
-      document.querySelectorAll('.export-section .view-tabs button').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent.toLowerCase().replace(' ', '') === fmt || 
-          (fmt === 'wt' && btn.textContent === 'Win Terminal') ||
-          (fmt === 'vscode' && btn.textContent === 'VS Code') ||
-          (fmt === 'iterm' && btn.textContent === 'iTerm2') ||
-          (fmt === 'alacritty' && btn.textContent === 'Alacritty') ||
-          (fmt === 'slack' && btn.textContent === 'Slack') ||
-          (fmt === 'css' && btn.textContent === 'CSS') ||
-          (fmt === 'raw' && btn.textContent === 'Raw'));
-      });
-      const sel = document.querySelector('.export-section .mobile-select');
+      const sel = document.querySelector('.export-select');
       if (sel) sel.value = fmt;
       renderExport();
     }
