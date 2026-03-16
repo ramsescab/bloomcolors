@@ -1111,6 +1111,81 @@
     @media (min-width: 1100px) {
       .toc { display: flex; }
     }
+
+    /* ── Mobile FAB TOC ── */
+    .toc-fab {
+      display: none;
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      z-index: 95;
+    }
+
+    .toc-fab-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--muted);
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 12px var(--card-shadow);
+      backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toc-fab-toggle:hover { color: var(--fg); }
+    .toc-fab.open .toc-fab-toggle { color: var(--fg); }
+
+    .toc-fab-menu {
+      position: absolute;
+      bottom: 3rem;
+      right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.6rem 0;
+      box-shadow: 0 4px 20px var(--card-shadow);
+      backdrop-filter: blur(16px);
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      min-width: 130px;
+    }
+
+    .toc-fab.open .toc-fab-menu {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .toc-fab-menu a {
+      display: block;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.45rem 1.1rem;
+      transition: color 0.15s ease, background 0.15s ease;
+    }
+
+    .toc-fab-menu a:hover,
+    .toc-fab-menu a.active {
+      color: var(--fg);
+      background: var(--card-shadow);
+    }
+
+    @media (max-width: 1099px) {
+      .toc-fab { display: block; }
+    }
   </style>
 </head>
 <body>
@@ -1129,6 +1204,17 @@
       <li><a href="#sec-export">Export</a></li>
     </ul>
   </nav>
+
+  <!-- Mobile FAB TOC -->
+  <div class="toc-fab" id="toc-fab">
+    <div class="toc-fab-menu">
+      <a href="#sec-about" onclick="closeFab()">About</a>
+      <a href="#sec-colors" onclick="closeFab()">Colors</a>
+      <a href="#sec-previews" onclick="closeFab()">Previews</a>
+      <a href="#sec-export" onclick="closeFab()">Export</a>
+    </div>
+    <button class="toc-fab-toggle" onclick="toggleFab()" aria-label="Table of contents">☰</button>
+  </div>
 
   <div class="container">
     <header id="sec-about">
@@ -1497,8 +1583,7 @@
   </div>
   <footer>
     <p>
-      Designed by <a href="https://github.com/ramsescab" target="_blank" rel="noopener">@ramsescab</a>
-      <span class="footer-dot">·</span>
+      Designed by <a href="https://github.com/ramsescab" target="_blank" rel="noopener">@ramsescab</a><br>
       Fine tuned with <a href="https://github.com/basiclines/rampa" target="_blank" rel="noopener">rampa</a> by <a href="https://github.com/basiclines" target="_blank" rel="noopener">@basiclines</a>
     </p>
   </footer>
@@ -1810,8 +1895,26 @@
     setTheme('light');
     renderColorViews();
 
-    // Scroll-spy for TOC
+    // FAB TOC toggle
+    function toggleFab() {
+      document.getElementById('toc-fab').classList.toggle('open');
+    }
+
+    function closeFab() {
+      document.getElementById('toc-fab').classList.remove('open');
+    }
+
+    // Close FAB when clicking outside
+    document.addEventListener('click', (e) => {
+      const fab = document.getElementById('toc-fab');
+      if (fab.classList.contains('open') && !fab.contains(e.target)) {
+        fab.classList.remove('open');
+      }
+    });
+
+    // Scroll-spy for both TOCs
     const tocLinks = document.querySelectorAll('.toc a');
+    const fabLinks = document.querySelectorAll('.toc-fab-menu a');
     const sections = [...tocLinks].map(a => document.querySelector(a.getAttribute('href')));
 
     window.addEventListener('scroll', () => {
@@ -1819,9 +1922,9 @@
       for (const sec of sections) {
         if (sec && sec.getBoundingClientRect().top <= 120) current = sec;
       }
-      tocLinks.forEach(a => {
-        a.classList.toggle('active', a.getAttribute('href') === '#' + (current ? current.id : ''));
-      });
+      const activeHref = '#' + (current ? current.id : '');
+      tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === activeHref));
+      fabLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === activeHref));
     }, { passive: true });
   </script>
 </body>
