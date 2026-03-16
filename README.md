@@ -138,9 +138,3 @@ The showcase includes:
 ## Credits
 
 Designed by [@ramsescab](https://github.com/ramsescab) · Fine tuned with [rampa](https://github.com/basiclines/rampa) by [@basiclines](https://github.com/basiclines)
-
----
-
-## License
-
-MIT
