@@ -3,6 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ゆったり (yuttari) — a calm, relaxed color palette with 14 soft hues for light & dark themes. Export for VS Code, iTerm2, Alacritty, Slack & more.">
+  <meta name="theme-color" content="#ffedf4">
+  <meta property="og:title" content="ゆったり — Bloom Colors">
+  <meta property="og:description" content="A calm, relaxed palette — soft hues that feel like a quiet afternoon. 14 colors, light & dark.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ramsescab.github.io/bloomcolors/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ゆったり — Bloom Colors">
+  <meta name="twitter:description" content="A calm, relaxed color palette with soft hues. 14 colors for light & dark themes.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23ffedf4'/><circle cx='35' cy='45' r='12' fill='%23a67ba6'/><circle cx='65' cy='45' r='12' fill='%237a8bb8'/><circle cx='50' cy='65' r='12' fill='%237bb8b8'/></svg>">
   <title>ゆったり — Bloom Colors</title>
   <style>
     /* ── Light theme: ゆったり Light ── */
@@ -59,7 +69,22 @@
       --cyan-bright: #a6dede;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      * { scroll-behavior: smooth; }
+    }
+
+    /* ── Focus-visible for keyboard accessibility ── */
+    :focus-visible {
+      outline: 2px solid var(--fg);
+      outline-offset: 2px;
+    }
+
+    button:focus-visible, select:focus-visible, input:focus-visible {
+      outline: 2px solid var(--magenta);
+      outline-offset: 2px;
+    }
 
     body {
       background: var(--bg);
@@ -562,6 +587,36 @@
 
     .copy-btn:hover { background: var(--fg); color: var(--bg); }
 
+    /* ── Click-to-copy toast ── */
+    .copy-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(1rem);
+      font-family: system-ui, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      background: var(--fg);
+      color: var(--bg);
+      box-shadow: 0 4px 16px var(--card-shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 200;
+    }
+
+    .copy-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Clickable hex values */
+    [data-key], .hex, .color-list-hex, .color-visual-cell {
+      cursor: pointer;
+    }
+
     /* ── Examples ── */
     .examples-section { margin-bottom: 2.5rem; }
 
@@ -998,6 +1053,10 @@
       padding-right: 1.8rem;
     }
 
+    [data-theme="dark"] .mobile-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23ffedf4' opacity='0.4'/%3E%3C/svg%3E");
+    }
+
     @media (max-width: 600px) {
       .export-section .mobile-select { display: block; }
       .export-section .view-tabs { display: none !important; }
@@ -1057,13 +1116,13 @@
 </head>
 <body>
   <!-- Theme toggle (fixed corner) -->
-  <div class="theme-toggle">
-    <button class="active" onclick="setTheme('light')">☀ Light</button>
-    <button onclick="setTheme('dark')">☾ Dark</button>
+  <div class="theme-toggle" role="tablist" aria-label="Theme">
+    <button class="active" role="tab" aria-selected="true" onclick="setTheme('light')">☀ Light</button>
+    <button role="tab" aria-selected="false" onclick="setTheme('dark')">☾ Dark</button>
   </div>
 
   <!-- Table of contents (fixed left, wide screens only) -->
-  <nav class="toc">
+  <nav class="toc" aria-label="Page sections">
     <ul>
       <li><a href="#sec-about">About</a></li>
       <li><a href="#sec-colors">Colors</a></li>
@@ -1105,10 +1164,10 @@
     <div class="palette-section">
       <div class="colors-header">
         <p class="section-title" id="sec-colors">Colors</p>
-        <div class="view-tabs">
-          <button class="active" onclick="setColorView('cards')">Cards</button>
-          <button onclick="setColorView('list')">List</button>
-          <button onclick="setColorView('grid')">Grid</button>
+        <div class="view-tabs" role="tablist" aria-label="Color display">
+          <button class="active" role="tab" aria-selected="true" onclick="setColorView('cards')">Cards</button>
+          <button role="tab" aria-selected="false" onclick="setColorView('list')">List</button>
+          <button role="tab" aria-selected="false" onclick="setColorView('grid')">Grid</button>
         </div>
       </div>
 
@@ -1187,11 +1246,11 @@
     <div class="preview-section" id="sec-previews">
       <div class="preview-header">
         <p class="section-title">Previews</p>
-        <div class="preview-tabs">
-          <button class="active" onclick="setPreview('terminal')">Terminal</button>
-          <button onclick="setPreview('syntax')">Syntax</button>
-          <button onclick="setPreview('ui')">UI</button>
-          <button onclick="setPreview('banner')">Banner</button>
+        <div class="preview-tabs" role="tablist" aria-label="Preview type">
+          <button class="active" role="tab" aria-selected="true" onclick="setPreview('terminal')">Terminal</button>
+          <button role="tab" aria-selected="false" onclick="setPreview('syntax')">Syntax</button>
+          <button role="tab" aria-selected="false" onclick="setPreview('ui')">UI</button>
+          <button role="tab" aria-selected="false" onclick="setPreview('banner')">Banner</button>
         </div>
       </div>
 
@@ -1408,11 +1467,11 @@
       <div class="colors-header">
         <p class="section-title">Export</p>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <div class="view-tabs export-theme-tabs">
-            <button class="active" onclick="setExportTheme('light')">☀ Light</button>
-            <button onclick="setExportTheme('dark')">☾ Dark</button>
+          <div class="view-tabs export-theme-tabs" role="tablist" aria-label="Export theme">
+            <button class="active" role="tab" aria-selected="true" onclick="setExportTheme('light')">☀ Light</button>
+            <button role="tab" aria-selected="false" onclick="setExportTheme('dark')">☾ Dark</button>
           </div>
-          <select class="mobile-select" onchange="setExport(this.value)">
+          <select class="mobile-select" aria-label="Export format" onchange="setExport(this.value)">
             <option value="raw">Raw</option>
             <option value="css">CSS</option>
             <option value="vscode">VS Code</option>
@@ -1421,14 +1480,14 @@
             <option value="alacritty">Alacritty</option>
             <option value="slack">Slack</option>
           </select>
-          <div class="view-tabs export-format-tabs">
-            <button class="active" onclick="setExport('raw')">Raw</button>
-            <button onclick="setExport('css')">CSS</button>
-            <button onclick="setExport('vscode')">VS Code</button>
-            <button onclick="setExport('iterm')">iTerm2</button>
-            <button onclick="setExport('wt')">Win Terminal</button>
-            <button onclick="setExport('alacritty')">Alacritty</button>
-            <button onclick="setExport('slack')">Slack</button>
+          <div class="view-tabs export-format-tabs" role="tablist" aria-label="Export format">
+            <button class="active" role="tab" aria-selected="true" onclick="setExport('raw')">Raw</button>
+            <button role="tab" aria-selected="false" onclick="setExport('css')">CSS</button>
+            <button role="tab" aria-selected="false" onclick="setExport('vscode')">VS Code</button>
+            <button role="tab" aria-selected="false" onclick="setExport('iterm')">iTerm2</button>
+            <button role="tab" aria-selected="false" onclick="setExport('wt')">Win Terminal</button>
+            <button role="tab" aria-selected="false" onclick="setExport('alacritty')">Alacritty</button>
+            <button role="tab" aria-selected="false" onclick="setExport('slack')">Slack</button>
           </div>
         </div>
       </div>
