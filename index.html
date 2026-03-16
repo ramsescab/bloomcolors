@@ -139,35 +139,6 @@
 
     .theme-toggle button:not(.active):hover { color: var(--fg); }
 
-    .texture-btn {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 0.72rem;
-      font-weight: 500;
-      padding: 0.35rem 0.55rem;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.25s ease;
-      border-radius: 7px;
-      border-left: 1px solid var(--card-border);
-      margin-left: 0.1rem;
-    }
-    .texture-btn:hover { color: var(--fg); }
-    .texture-btn.active { color: var(--fg); }
-
-    /* Page-wide paper texture */
-    .page-paper {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      pointer-events: none;
-      opacity: 0.5;
-      mix-blend-mode: overlay;
-      display: none;
-    }
-    .page-paper.active { display: block; }
-
     /* ── Header — editorial ── */
     header {
       text-align: center;
@@ -1108,7 +1079,6 @@
       /* Theme toggle — smaller */
       .theme-toggle { top: 0.6rem; right: 0.6rem; padding: 0.2rem; border-radius: 8px; }
       .theme-toggle button { font-size: 0.65rem; padding: 0.28rem 0.55rem; border-radius: 6px; }
-      .texture-btn { font-size: 0.65rem; padding: 0.28rem 0.45rem; }
 
       /* Base cards — shorter */
       .base-row { grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.5rem; }
@@ -1352,11 +1322,7 @@
   <div class="theme-toggle" role="tablist" aria-label="Theme">
     <button class="active" role="tab" aria-selected="true" onclick="setTheme('light')">☀ Light</button>
     <button role="tab" aria-selected="false" onclick="setTheme('dark')">☾ Dark</button>
-    <button class="texture-btn" onclick="toggleTexture()" title="Toggle paper texture">🗒</button>
   </div>
-
-  <!-- Page-wide paper texture -->
-  <div class="page-paper" id="page-paper"></div>
 
   <!-- Table of contents (fixed left, wide screens only) -->
   <nav class="toc" aria-label="Page sections">
@@ -2194,21 +2160,6 @@
     setTheme('light');
     renderColorViews();
 
-    // Paper texture toggle
-    let textureInited = false;
-    function toggleTexture() {
-      const el = document.getElementById('page-paper');
-      const btn = document.querySelector('.texture-btn');
-      el.classList.toggle('active');
-      btn.classList.toggle('active');
-      if (!textureInited && el.classList.contains('active')) {
-        textureInited = true;
-        // Init is handled in the module script
-        window.dispatchEvent(new Event('init-paper'));
-      }
-    }
-    window.toggleTexture = toggleTexture;
-
     // FAB TOC toggle
     function toggleFab() {
       document.getElementById('toc-fab').classList.toggle('open');
@@ -2242,7 +2193,7 @@
     }, { passive: true });
   </script>
   <script type="module">
-    import { ShaderMount, meshGradientFragmentShader, paperTextureFragmentShader, getShaderColorFromString } from 'https://cdn.jsdelivr.net/npm/@paper-design/shaders@0.0.72/+esm';
+    import { ShaderMount, meshGradientFragmentShader, getShaderColorFromString } from 'https://cdn.jsdelivr.net/npm/@paper-design/shaders@0.0.72/+esm';
 
     const posterBg = document.querySelector('.poster-bg');
     let shaderMount = null;
@@ -2292,37 +2243,6 @@
     };
 
     initShader();
-
-    // Lazy-init page-wide paper texture on first toggle
-    window.addEventListener('init-paper', () => {
-      const pagePaper = document.getElementById('page-paper');
-      if (!pagePaper) return;
-      const paperUniforms = {
-        u_colorBack: getShaderColorFromString('#e8dde0'),
-        u_colorFront: getShaderColorFromString('#b8a8ae'),
-        u_contrast: 0.4,
-        u_roughness: 0.6,
-        u_fiber: 0.4,
-        u_fiberSize: 0.25,
-        u_crumples: 0.3,
-        u_crumpleSize: 0.4,
-        u_folds: 0.6,
-        u_foldCount: 5,
-        u_drops: 0.2,
-        u_fade: 0,
-        u_seed: 5.8,
-        u_scale: 0.8,
-        u_rotation: 0,
-        u_offsetX: 0,
-        u_offsetY: 0,
-        u_fit: 2,
-        u_worldWidth: 0,
-        u_worldHeight: 0,
-        u_originX: 0.5,
-        u_originY: 0.5
-      };
-      new ShaderMount(pagePaper, paperTextureFragmentShader, paperUniforms, { alpha: true }, 0);
-    }, { once: true });
   </script>
 
   <!-- Fullscreen color overlay -->
